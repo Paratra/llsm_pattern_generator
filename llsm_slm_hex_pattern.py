@@ -126,6 +126,22 @@ def get_dots_img(rows, cols, Npix, bessel_dot, bd_range=20):
     return img_bd 
 
 def save_phases_1bit(img, Npix, phase, alpha, save_path, slm_w, slm_l):
+    """
+    Save phase-shifted versions of an input image with specific cropping and file saving options.
+
+    Parameters:
+        img (numpy.ndarray): The input grayscale image with dimensions (N, N).
+        Npix (int): The size of the input image, assumed to be square.
+        phase (int): The number of phase steps to generate and save.
+        alpha (float): The threshold value for converting pixel intensities to binary 1-bit values.
+        save_path (str): The directory path to save the phase-shifted images as BMP files.
+        slm_w (int): The width of the SLM region to crop, assumed to be less than or equal to Npix.
+        slm_l (int): The length of the SLM region to crop, assumed to be less than or equal to Npix.
+
+    Returns:
+        numpy.ndarray: The thresholded input image with dimensions (N, N).
+    """
+
     img[img<=np.max(img)*alpha]=0
     img[img!=0]=255
 
@@ -152,10 +168,12 @@ def save_phases_1bit(img, Npix, phase, alpha, save_path, slm_w, slm_l):
     return img
 
 def main():
-    # rows = 4096
-    # cols = 4096
 
-    Npix = 6
+    Npix = 18
+    Nphase = 9
+
+
+
     save_path = f"{Npix}pixel_lattice_1bit"
     # Check whether the specified path exists or not
     isExist = os.path.exists(save_path)
@@ -166,22 +184,22 @@ def main():
 
     
 
-    slm_w = 1536
-    slm_l = 2048
+    # slm_w = 1536
+    # slm_l = 2048
 
 
 
     # rows = 512
     # cols = 512
-    # slm_w = 100
-    # slm_l = 200
+    slm_w = 100
+    slm_l = 200
 
     wl = 0.488
-    nx = 64 ## decide size of bessel beam
+    nx = 256 ## decide size of bessel beam
     # assert rows>(slm_w+3*Npix+nx/4)
     # assert cols>(slm_l+3*Npix+nx/4)
     # st()
-    rows = cols = int(np.max([slm_w+3*Npix+nx/4,slm_l+3*Npix+nx/4])+Npix)
+    rows = cols = int(np.max([slm_w+3*Npix+nx/4,slm_l+3*Npix+nx/4])+3*Npix)
 
     # st()
 
@@ -227,7 +245,7 @@ def main():
 
     # st()
     
-    temp = save_phases_1bit(img, Npix=Npix, phase=3, alpha=0.3, save_path=save_path, slm_w=slm_w, slm_l=slm_l)
+    temp = save_phases_1bit(img, Npix=Npix, phase=Nphase, alpha=0.3, save_path=save_path, slm_w=slm_w, slm_l=slm_l)
 
     temp = temp.astype(np.uint8)
     final = Image.fromarray(temp)
