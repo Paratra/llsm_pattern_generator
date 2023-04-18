@@ -166,15 +166,15 @@ def main():
 
     
 
-    # slm_w = 1536
-    # slm_l = 2048
+    slm_w = 1536
+    slm_l = 2048
 
 
 
     # rows = 512
     # cols = 512
-    slm_w = 100
-    slm_l = 200
+    # slm_w = 100
+    # slm_l = 200
 
     wl = 0.488
     nx = 64 ## decide size of bessel beam
